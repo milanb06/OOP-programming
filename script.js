@@ -12,10 +12,25 @@
 /* ********************************************* */
 /* globale variabelen die je gebruikt in je game */
 /* ********************************************* */
-var xPosities;
-var yPosities;
-var speedX;
-var speedY;
+class Mens {
+  x;
+  y;
+  speedX;
+  speedY;
+
+  constructor(newX, newY, newSpeedX, newSpeedY) {
+    this.x = newX;
+    this.y = newY;
+    this.speedX = newSpeedX;
+    this.speedY = newSpeedY;
+  }
+
+  update() {
+    this.x = this.x - this.speedX;
+    this.y = this.y - this.speedY;
+  }
+}
+var mensen;
 const BREEDTE = 20;
 
 
@@ -34,10 +49,30 @@ function setup() {
   createCanvas(1280, 720);
 
   // initialiseer waarden
-  xPosities = [192, 450, 800, 120, 1250];
-  yPosities = [690, 150, 40, 500, 330];           // midden van de hoogte van het canvas
-  speedX = [5, 10, 2, 6, 15];      // random waarde tussen -5 en 5
-  speedY = [10, 5, 15, 2, 6];      // 👆
+mensen = [  {x: 320,
+    y: 100,
+    speedX : 2,
+    speedY : -4},
+   {x: 500,
+    y: 490,
+    speedX : -3,
+    speedY : 1},
+    {x: 600,
+    y: 400,
+  speedX: 1,
+speedY: 5},
+{x: 900,
+  y: 700,
+speedX: -1,
+speedY: -5},
+{x: 50,
+  y: 50,
+speedX: -4,
+speedY: 6}
+
+   // voeg hier ZELF nog 3 extra mensobjecten toe.
+   // na het laatste object GEEN komma
+ ]; // 👆
 }
 
 /**
@@ -50,20 +85,19 @@ function draw() {
   background(0, 0, 0);
 
   // teken
- for (var i = 0; i < xPosities.length; i++){
+ for (var i = 0; i < mensen.length; i++){
  
-  rect(xPosities[i], yPosities[i], BREEDTE, BREEDTE);
+  rect(mensen[i].x, mensen[i].y, BREEDTE, BREEDTE);
 
   //update positie
-  xPosities[i] = xPosities[i] + speedX[i];
-  yPosities[i] = yPosities[i] + speedY[i];
 
-   if (xPosities[i] <= 0 || xPosities[i] + BREEDTE >= width) {
-     speedX[i] = speedX[i] * -1;
+
+   if (mensen[i].x <= 0 || mensen[i].x + BREEDTE >= width) {
+     mensen[i].speedX = mensen[i].speedX * -1;
  }
 
-   if (yPosities[i] <= 0 || yPosities[i] + BREEDTE >= height) {
-    speedY[i] = speedY[i] * -1;
+   if (mensen[i].y <= 0 || mensen[i].y + BREEDTE >= height) {
+    mensen[i].speedY = mensen[i].speedY * -1;
    }
 
  }
