@@ -17,21 +17,64 @@ class Mens {
   y;
   speedX;
   speedY;
+  breedte;
+  isBesmet;
 
   constructor(newX, newY, newSpeedX, newSpeedY) {
     this.x = newX;
     this.y = newY;
     this.speedX = newSpeedX;
     this.speedY = newSpeedY;
+    this.breedte = 20;
+    this.isBesmet = false;
   }
+  show(){
 
+
+    if (this.isBesmet === true){
+      fill(255,0,0); 
+      rect(this.x, this.y, this.breedte, this.breedte);
+    }
+    else {
+      noStroke();
+      fill(255,255,255);
+      rect(this.x, this.y, this.breedte, this.breedte);
+    }
+  }
   update() {
     this.x = this.x - this.speedX;
     this.y = this.y - this.speedY;
+
+    if (this.x <= 0 || this.x + this.breedte >= width) {
+      this.speedX = this.speedX * -1;
+  }
+ 
+    if (this.y <= 0 || this.y + this.breedte >= height) {
+    this.speedY = this.speedY * -1;
+    }
+  }
+  isOverlappend(andereMens) {
+    // zet teruggeefwaarde standaard op false
+    var overlappend = false;
+  
+    // zet teruggeefwaarde op true als er een overlap is
+    if ( (this.x >= andereMens.x &&
+          this.x <= andereMens.x + andereMens.breedte &&
+          this.y >= andereMens.y &&
+          this.y <= andereMens.y + andereMens.breedte)
+  
+          /* VUL HIER ZELF LATER AAN VOOR DE ANDERE HOEKEN*/
+        ) {
+  
+      overlappend = true;
+    }
+  
+    // stuur de teruggeefwaarde terug
+    return overlappend;
   }
 }
-var mensen;
-const BREEDTE = 20;
+var mensen = [];
+
 
 
 
@@ -49,30 +92,24 @@ function setup() {
   createCanvas(1280, 720);
 
   // initialiseer waarden
-mensen = [  {x: 320,
-    y: 100,
-    speedX : 2,
-    speedY : -4},
-   {x: 500,
-    y: 490,
-    speedX : -3,
-    speedY : 1},
-    {x: 600,
-    y: 400,
-  speedX: 1,
-speedY: 5},
-{x: 900,
-  y: 700,
-speedX: -1,
-speedY: -5},
-{x: 50,
-  y: 50,
-speedX: -4,
-speedY: 6}
-
-   // voeg hier ZELF nog 3 extra mensobjecten toe.
-   // na het laatste object GEEN komma
- ]; // 👆
+  for (var teller = 0; teller < 25; teller++) {
+    // we moeten ze niet te dicht bij de rand tekenen
+    // om geen problemen met stuiteren te krijgen
+    var ruimteTotRand = 50;
+    
+    // creëer random positie en snelheid
+    var randomX = random(ruimteTotRand, width - ruimteTotRand);
+    var randomY = random(ruimteTotRand, height - ruimteTotRand);
+    var randomSpeedX = random(-5, 5);
+    var randomSpeedY = random(-5, 5);
+  
+    // maak nieuw mensobject
+    var nieuwMens = new Mens(randomX, randomY, randomSpeedX, randomSpeedY);
+    
+    // voeg mensobject toe aan array
+    mensen.push(nieuwMens);
+  }
+  mensen[0].isBesmet = true;
 }
 
 /**
@@ -85,23 +122,17 @@ function draw() {
   background(0, 0, 0);
 
   // teken
- for (var i = 0; i < mensen.length; i++){
- 
-  rect(mensen[i].x, mensen[i].y, BREEDTE, BREEDTE);
+  for (var i = 0; i < mensen.length; i++) {
+    // verwijs met 'mens' naar het mens-object die bij deze
+    // iteratie van de loop hoort.
+    var mens = mensen[i];
+    
+    // teken
+    mens.show();
 
-  //update positie
-
-
-   if (mensen[i].x <= 0 || mensen[i].x + BREEDTE >= width) {
-     mensen[i].speedX = mensen[i].speedX * -1;
- }
-
-   if (mensen[i].y <= 0 || mensen[i].y + BREEDTE >= height) {
-    mensen[i].speedY = mensen[i].speedY * -1;
-   }
-
- }
-
+    // update positie en stuiter eventueel
+    mens.update();
+  }
 
   // stuiter evt. tegen de kanten
  
