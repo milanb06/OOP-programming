@@ -12,150 +12,130 @@
 /* ********************************************* */
 /* globale variabelen die je gebruikt in je game */
 /* ********************************************* */
-class Mens {
+
+class Actor {
   x;
   y;
   speedX;
   speedY;
   breedte;
   isBesmet;
+  
+  constructor(x, y, speedX, speedY) {
+    this.x = x;
+    this.y = y;
+    this.speedX = speedX;
+    this.speedY = speedY;
+    this.isBesmet = false;
+    this.besmettelijkheidsteller = 0;
+  }
+  
+  show(){
+  }
+  besmet(){}
+  update() {
+    this.x = this.x - this.speedX;
+    this.y = this.y - this.speedY;
 
-  constructor(newX, newY, newSpeedX, newSpeedY) {
-    this.x = newX;
-    this.y = newY;
-    this.speedX = newSpeedX;
-    this.speedY = newSpeedY;
+    if (this.x <= 0 || this.x + this.breedte >= width) {
+      this.speedX = this.speedX * -1;
+  }
+ 
+    if (this.y <= 0 || this.y + this.breedte >= height) {
+    this.speedY = this.speedY * -1;
+    }
+    this.besmettelijkheidsTeller--;
+    if (this.besmettelijkheidsTeller === 0) {
+      this.isBesmet = false;
+    }
+  }
+  isOverlappend(andereActor) {
+    // zet teruggeefwaarde standaard op false
+    var overlappend = false;
+  
+    // zet teruggeefwaarde op true als er een overlap is
+    if ( (this.x >= andereActor.x &&
+          this.x <= andereActor.x + andereActor.breedte &&
+          this.y >= andereActor.y &&
+          this.y <= andereActor.y + andereActor.breedte)||
+        (this.x >= andereActor.x &&
+            this.x <= andereActor.x + andereActor.breedte &&
+            this.y + this.breedte>= andereActor.y &&
+            this.y + this.breedte <= andereActor.y + andereActor.breedte)||
+          (this.x + this.breedte >= andereActor.x &&
+              this.x + this.breedte <= andereActor.x + andereActor.breedte &&
+              this.y >= andereActor.y &&
+              this.y <= andereActor.y + andereActor.breedte)||
+              (this.x + this.breedte >= andereActor.x &&
+                this.x + this.breedte<= andereActor.x + andereActor.breedte &&
+                this.y + this.breedte>= andereActor.y &&
+                this.y + this.breedte<= andereActor.y + andereActor.breedte)
+          /* VUL HIER ZELF LATER AAN VOOR DE ANDERE HOEKEN*/
+        ) {
+  
+      overlappend = true;
+    }
+  
+    // stuur de teruggeefwaarde terug
+    return overlappend;
+  }
+  
+    // stuur de teruggeefwaarde terug
+
+}
+
+class Mens extends Actor {
+  constructor(x, y, speedX, speedY) {
+    // roep de constructor van Actor aan
+    super(x, y, speedX, speedY);
+
+    // geef breedte een correcte waarde
     this.breedte = 20;
-    this.isBesmet = false;
   }
-  show(){
 
-
-    if (this.isBesmet === true){
-      fill(255,0,0); 
-      rect(this.x, this.y, this.breedte, this.breedte);
+  show() {
+    noStroke();
+    if (this.isBesmet === true) {
+      fill(255, 0, 0);      // rood
     }
     else {
-      noStroke();
-      fill(255,255,255);
-      rect(this.x, this.y, this.breedte, this.breedte);
+      fill(255, 255, 255);  // wit
     }
-  }
-  update() {
-    this.x = this.x - this.speedX;
-    this.y = this.y - this.speedY;
 
-    if (this.x <= 0 || this.x + this.breedte >= width) {
-      this.speedX = this.speedX * -1;
+    rect(this.x, this.y, this.breedte, this.breedte);
   }
- 
-    if (this.y <= 0 || this.y + this.breedte >= height) {
-    this.speedY = this.speedY * -1;
-    }
-  }
-  isOverlappend(andereMens) {
-    // zet teruggeefwaarde standaard op false
-    var overlappend = false;
-  
-    // zet teruggeefwaarde op true als er een overlap is
-    if ( (this.x >= andereMens.x &&
-          this.x <= andereMens.x + andereMens.breedte &&
-          this.y >= andereMens.y &&
-          this.y <= andereMens.y + andereMens.breedte)||
-        (this.x >= andereMens.x &&
-            this.x <= andereMens.x + andereMens.breedte &&
-            this.y + this.breedte>= andereMens.y &&
-            this.y + this.breedte <= andereMens.y + andereMens.breedte)||
-          (this.x + this.breedte >= andereMens.x &&
-              this.x + this.breedte <= andereMens.x + andereMens.breedte &&
-              this.y >= andereMens.y &&
-              this.y <= andereMens.y + andereMens.breedte)||
-              (this.x + this.breedte >= andereMens.x &&
-                this.x + this.breedte<= andereMens.x + andereMens.breedte &&
-                this.y + this.breedte>= andereMens.y &&
-                this.y + this.breedte<= andereMens.y + andereMens.breedte)
-          /* VUL HIER ZELF LATER AAN VOOR DE ANDERE HOEKEN*/
-        ) {
-  
-      overlappend = true;
-    }
-  
-    // stuur de teruggeefwaarde terug
-    return overlappend;
+  besmet() {
+    this.besmettelijkheidsTeller = 400;
+    this.isBesmet = true;
   }
 }
-class Kat {
-  x;
-  y;
-  speedX;
-  speedY;
-  breedte;
-  isBesmet;
 
-  constructor(newX, newY, newSpeedX, newSpeedY) {
-    this.x = newX;
-    this.y = newY;
-    this.speedX = newSpeedX;
-    this.speedY = newSpeedY;
+class Kat extends Actor {
+  constructor(x, y, speedX, speedY) {
+    // roep de constructor van Actor aan
+    super(x, y, speedX, speedY);
+
+    // geef breedte een correcte waarde
     this.breedte = 10;
-    this.isBesmet = false;
   }
-  show(){
 
-
-    if (this.isBesmet === true){
-      fill(247,149,0); 
-      rect(this.x, this.y, this.breedte, this.breedte);
+  show() {
+    noStroke();
+    if (this.isBesmet === true) {
+      fill(255, 140, 0);   // oranje
     }
     else {
-      noStroke();
-      fill(0,0,255);
-      rect(this.x, this.y, this.breedte, this.breedte);
+      fill(0, 0, 255);     // blauw
     }
-  }
-  update() {
-    this.x = this.x - this.speedX;
-    this.y = this.y - this.speedY;
 
-    if (this.x <= 0 || this.x + this.breedte >= width) {
-      this.speedX = this.speedX * -1;
+    rect(this.x, this.y, this.breedte, this.breedte);
   }
- 
-    if (this.y <= 0 || this.y + this.breedte >= height) {
-    this.speedY = this.speedY * -1;
-    }
-  }
-  isOverlappend(andereKat) {
-    // zet teruggeefwaarde standaard op false
-    var overlappend = false;
-  
-    // zet teruggeefwaarde op true als er een overlap is
-    if ( (this.x >= andereKat.x &&
-          this.x <= andereKat.x + andereKat.breedte &&
-          this.y >= andereKat.y &&
-          this.y <= andereKat.y + andereKat.breedte)||
-        (this.x >= andereKat.x &&
-            this.x <= andereKat.x + andereKat.breedte &&
-            this.y + this.breedte>= andereKat.y &&
-            this.y + this.breedte <= andereKat.y + andereKat.breedte)||
-          (this.x + this.breedte >= andereKat.x &&
-              this.x + this.breedte <= andereKat.x + andereKat.breedte &&
-              this.y >= andereKat.y &&
-              this.y <= andereKat.y + andereKat.breedte)||
-              (this.x + this.breedte >= andereKat.x &&
-                this.x + this.breedte<= andereKat.x + andereKat.breedte &&
-                this.y + this.breedte>= andereKat.y &&
-                this.y + this.breedte<= andereKat.y + andereKat.breedte)
-          /* VUL HIER ZELF LATER AAN VOOR DE ANDERE HOEKEN*/
-        ) {
-  
-      overlappend = true;
-    }
-  
-    // stuur de teruggeefwaarde terug
-    return overlappend;
+  besmet() {
+    this.besmettelijkheidsTeller = 200;
+    this.isBesmet = true;
   }
 }
+
 class Dokter extends Mens {
   show(){
     noStroke();
@@ -214,8 +194,8 @@ function setup() {
     // creëer random positie en snelheid
     var randomX = random(ruimteTotRand, width - ruimteTotRand);
     var randomY = random(ruimteTotRand, height - ruimteTotRand);
-    var randomSpeedX = random(-2, 2);
-    var randomSpeedY = random(-2, 2);
+    var randomSpeedX = random(-3, 3);
+    var randomSpeedY = random(-3, 3);
   
     // maak nieuw mensobject
     var nieuwKat = new Kat(randomX, randomY, randomSpeedX, randomSpeedY);
@@ -236,6 +216,31 @@ function setup() {
 function draw() {
   // zwarte achtergrond
   background(0, 0, 0);
+
+  var aantalBesmet = 0;
+  var aantalOnbesmet= 0;
+  for (var i = 0; i < actoren.length; i++) {
+    // verwijs met 'mens' naar het mens-object die bij deze
+    // iteratie van de loop hoort.
+    var actor = actoren[i];
+    
+    // teken
+    actor.show();
+
+    // update positie en stuiter eventueel
+    actor.update();
+    if (actor.isBesmet){
+      aantalBesmet = aantalBesmet +1;
+    }
+    else {
+      aantalOnbesmet = aantalOnbesmet +1;
+    }
+  }
+  noStroke();
+  textSize(15);
+  fill(255,255,255);
+  text("Besmet: " + aantalBesmet, 1100, 30);
+  text("Onbesmet: " + aantalOnbesmet, 1100, 60);
 
   // teken
   for (var i = 0; i < actoren.length; i++) {
