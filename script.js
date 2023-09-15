@@ -156,6 +156,20 @@ class Kat {
     return overlappend;
   }
 }
+class Dokter extends Mens {
+  show(){
+    noStroke();
+      fill(255,255,255);
+      rect(this.x, this.y, this.breedte, this.breedte);
+
+      strokeWeight(5);
+      stroke(255, 0, 0); // rood
+      line(this.x + this.breedte / 2, this.y,
+      this.x + this.breedte / 2, this.y + this.breedte);
+      line(this.x, this.y + this.breedte / 2,
+      this.x + this.breedte, this.y + this.breedte / 2);
+  }
+}
 var actoren = [];
 
 
@@ -209,6 +223,8 @@ function setup() {
     // voeg mensobject toe aan array
     actoren.push(nieuwKat);
   }
+  actoren.push(new Dokter(width / 2, height / 2, 3, 5));
+
   actoren[0].isBesmet = true;
 }
 
@@ -235,8 +251,8 @@ function draw() {
   }
   for (var i = 0; i < actoren.length; i++) {
     var actorA = actoren[i];
-    // ga met mensA opnieuw alle mensen langs om te checken op overlap, behalve met zichzelf
-    for (var j = 0; j < actoren.length; j++) {
+    // ga met actorA opnieuw alle mensen langs om te checken op overlap, behalve met zichzelf
+    for (var j = i+1; j < actoren.length; j++) {
       var actorB = actoren[j];
       if (actorA != actorB) {
         // check overlap
@@ -244,10 +260,19 @@ function draw() {
         if (actorenOverlappen) {
           // check of er een besmetting optreedt
           if (actorA.isBesmet || actorB.isBesmet) {
-            // als er één besmet is, wordt ze allebei besmet
-            // als ze allebei besmet zijn, verandert deze code niets.
-            actorA.isBesmet = true;
-            actorB.isBesmet = true;
+            if (actorA instanceof Dokter || actorB instanceof Dokter) {
+              // minimaal één van de mensen is dokter,
+              // dus ze worden / blijven beide gezond
+              actorA.isBesmet = false;
+              actorB.isBesmet = false;
+            }
+            else {
+              // geen van de mensen is dokter, dus
+              // als er één besmet is, wordt ze allebei besmet
+              // als ze allebei besmet zijn, verandert deze code niets.
+              actorA.isBesmet = true;
+              actorB.isBesmet = true;
+            }
           }
         }
       }
