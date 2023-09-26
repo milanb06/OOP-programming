@@ -4,15 +4,23 @@ class Actor {
     speedX;
     speedY;
     breedte;
-    isBesmet;
+    #isBesmet;
     
     constructor(x, y, speedX, speedY) {
       this.x = x;
       this.y = y;
       this.speedX = speedX;
       this.speedY = speedY;
-      this.isBesmet = false;
+      this.#isBesmet = false;
       this.besmettelijkheidsteller = 0;
+    }
+
+    getIsBesmet(){
+        return this.#isBesmet
+    }
+
+    setIsBesmet(besmetting) {
+      this.#isBesmet = besmetting;
     }
     
     show(){

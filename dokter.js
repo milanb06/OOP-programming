@@ -1,4 +1,9 @@
 class Dokter extends Mens {
+
+    setIsBesmet(besmetting) {
+      super.setIsBesmet(false);
+    }
+
     show(){
       noStroke();
         fill(255,255,255);

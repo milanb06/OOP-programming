@@ -69,6 +69,23 @@ function setup() {
     // voeg mensobject toe aan array
     actoren.push(nieuwKat);
   }
+  for (var teller = 0; teller < 5; teller++) {
+    // we moeten ze niet te dicht bij de rand tekenen
+    // om geen problemen met stuiteren te krijgen
+    var ruimteTotRand = 50;
+    
+    // creëer random positie en snelheid
+    var randomX = random(ruimteTotRand, width - ruimteTotRand);
+    var randomY = random(ruimteTotRand, height - ruimteTotRand);
+    var randomSpeedX = random(-7, 7);
+    var randomSpeedY = random(-7, 7);
+  
+    // maak nieuw mensobject
+    var nieuwWappie = new Wappie(randomX, randomY, randomSpeedX, randomSpeedY);
+    
+    // voeg mensobject toe aan array
+    actoren.push(nieuwWappie);
+  }
   actoren.push(new Dokter(width / 2, height / 2, 3, 5));
 
   actoren[0].isBesmet = true;
@@ -136,6 +153,10 @@ function draw() {
               // dus ze worden / blijven beide gezond
               actorA.isBesmet = false;
               actorB.isBesmet = false;
+            }
+            if (actorA instanceof Wappie && actorB != Dokter){
+              actorB.isBesmet = true;
+
             }
             else {
               // geen van de mensen is dokter, dus
