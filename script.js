@@ -154,7 +154,7 @@ function draw() {
               actorA.isBesmet = false;
               actorB.isBesmet = false;
             }
-            if (actorA instanceof Wappie && actorB != Dokter){
+            if (actorA instanceof Wappie && actorB instanceof Kat){
               actorB.isBesmet = true;
 
             }

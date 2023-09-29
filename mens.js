@@ -6,9 +6,11 @@ class Mens extends Actor {
       super(x, y, speedX, speedY);
   
       // geef breedte een correcte waarde
-      this.breedte = 20;
+     
     }
-  
+   setBreedte(breedte){
+    super.setBreedte(20);
+   }
     show() {
       noStroke();
       if (this.isBesmet === true) {

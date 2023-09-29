@@ -1,12 +1,14 @@
 class Kat extends Actor {
-    constructor(x, y, speedX, speedY) {
+    constructor(x, y, speedX, speedY) {  
       // roep de constructor van Actor aan
       super(x, y, speedX, speedY);
   
       // geef breedte een correcte waarde
-      this.breedte = 10;
+      
     }
-  
+    setBreedte(breedte){
+      super.setBreedte(10);
+     }
     show() {
       noStroke();
       if (this.isBesmet === true) {
@@ -16,7 +18,7 @@ class Kat extends Actor {
         fill(0, 0, 255);     // blauw
       }
   
-      rect(this.x, this.y, this.breedte, this.breedte);
+      rect(this.x, this.y, this.breedte, this.breedte);             
     }
     besmet() {
       this.besmettelijkheidsTeller = 200;
